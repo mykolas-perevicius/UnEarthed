@@ -3,7 +3,7 @@ const renderGifts = async () => {
     const data = await response.json();
   
     const mainContent = document.getElementById('main-content');
-    mainContent.innerHTML = ''; // Clear any existing content in the main element
+    mainContent.innerHTML = ''; // Clear any existing content
   
     if (data) {
       data.map(gift => {
@@ -32,12 +32,11 @@ const renderGifts = async () => {
         const link = document.createElement('a');
         link.textContent = 'Read More >';
         link.setAttribute('role', 'button');
-        link.href = `/public/gift.html?id=${gift.id}`; // Updated to include the gift ID as a query parameter
+        link.href = `/gifts/${gift.id}`;
         bottomContainer.appendChild(link);
   
         card.appendChild(topContainer);
         card.appendChild(bottomContainer);
-  
         mainContent.appendChild(card);
       });
     } else {
@@ -47,5 +46,15 @@ const renderGifts = async () => {
     }
   };
   
-  renderGifts();
+  // Get the portion of the URL after the "/"
+  const requestedUrl = window.location.href.split('/').pop();
+  
+  // Check if the requested URL is valid
+  if (requestedUrl && requestedUrl !== 'index.html') {
+    // If the URL is invalid, redirect to the 404 page
+    window.location.href = '../404.html';
+  } else {
+    // If the URL is valid, render the gifts
+    renderGifts();
+  }
   
